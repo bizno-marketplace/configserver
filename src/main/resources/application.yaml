@@ -1,0 +1,25 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: configserver
+  cloud:
+    config:
+      server:
+        git:
+          uri: ${GIT_CONFIG_URI:https://github.com/bizno-marketplace/bizno-configs}
+          search-paths: '{application}'
+          clone-on-start: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
+  instance:
+    preferIpAddress: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, refresh, env
