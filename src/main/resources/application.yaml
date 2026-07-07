@@ -19,7 +19,12 @@ eureka:
     preferIpAddress: true
 
 management:
+  server:
+    port: 9888
   endpoints:
     web:
       exposure:
-        include: health, refresh, env
+        include: health, info, prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}
