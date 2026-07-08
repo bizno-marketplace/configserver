@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: configserver
+  namespace: bizno
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: configserver }
+  template:
+    metadata:
+      labels: { app: configserver }
+    spec:
+      containers:
+        - name: configserver
+          image: gervasioartur/configserver:v8-test
+          env:
+            # discovery-server Service DNS inside the 'bizno' namespace
+            - name: DISCOVERY_SERVER_URL
+              value: "http://discovery-server:8761/eureka/"
+            - name: LOKI_URL
+              value: "http://loki:3100"
+          ports:
+            - containerPort: 8888
+            - containerPort: 9888
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 9888
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 9888
+            initialDelaySeconds: 30
+            periodSeconds: 15
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: configserver
+  namespace: bizno
+spec:
+  selector: { app: configserver }
+  ports:
+    - port: 8888
+      targetPort: 8888
+      name: main
+    - port: 9888
+      targetPort: 9888
+      name: management
