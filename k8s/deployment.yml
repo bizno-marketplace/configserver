@@ -13,13 +13,15 @@ spec:
     spec:
       containers:
         - name: configserver
-          image: gervasioartur/configserver:v8-test
+          image: gervasioartur/configserver:f88bce1
           env:
             # discovery-server Service DNS inside the 'bizno' namespace
             - name: DISCOVERY_SERVER_URL
               value: "http://discovery-server:8761/eureka/"
             - name: LOKI_URL
               value: "http://loki:3100"
+            - name: ZIPKIN_URL
+              value: "http://zipkin:9411"
           ports:
             - containerPort: 8888
             - containerPort: 9888
