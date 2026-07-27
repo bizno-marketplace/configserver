@@ -10,7 +10,7 @@ services:
       - "8888:8888"   # main port
       - "9888:9888"   # management port
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:9888/actuator/health"]
+      test: [ "CMD", "wget", "-qO-", "http://localhost:9888/actuator/health" ]
       interval: 10s
       timeout: 5s
       retries: 10
